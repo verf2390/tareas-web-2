@@ -1,0 +1,57 @@
+﻿{% extends 'base/principal.html' %}
+{% block content %}
+
+<div class="barra_superior">
+    <a href="{% url 'tareas' %}" style="color: white; font-size: 24px;">&#x23CE;</a>
+    <span>Eliminar tarea</span>
+</div>
+
+<div class="cuerpo_tarjeta" style="max-width: 450px; margin: auto; text-align: center;">
+    <form method="POST">
+        {% csrf_token %}
+        <p>¿Estás seguro que deseas eliminar la tarea "<strong>{{ object.titulo }}</strong>"?</p>
+        <input class="boton" type="submit" value="Eliminar" />
+    </form>
+</div>
+
+<style>
+    .boton {
+        background-color: #dc3545;
+        color: white;
+        border: none;
+        padding: 10px 25px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+        display: inline-block;
+        margin-top: 20px;
+        width: 100%;
+    }
+
+        .boton:hover {
+            background-color: #b02a37;
+        }
+
+    .barra_superior {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 10px 0;
+        border-radius: 5px 5px 0 0;
+        background: linear-gradient(90deg,#ccd7f4 0%,#1c4dd0 43%, #1c4dd0 100%);
+        border-bottom: 1px solid #ccc;
+        color: white;
+        font-size: 24px;
+        gap: 15px;
+        font-weight: 600;
+    }
+
+        .barra_superior span {
+            flex-grow: 1;
+            font-size: 20px;
+        }
+</style>
+
+{% endblock %}

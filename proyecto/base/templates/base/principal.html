@@ -1,0 +1,336 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <title>{% block title %}Lista de Pendientes{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;500;700&display=swap" rel="stylesheet" />
+
+    <style>
+        /* Reset y box-sizing global */
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Open Sans", sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+            padding: 25px 30px;
+        }
+
+        .barra_superior {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 15px 20px;
+            border-radius: 12px;
+            background: linear-gradient(90deg, #dbeafe 0%, #3b82f6 100%);
+            color: #ffffff;
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 25px;
+            user-select: none;
+        }
+
+        h1, h3 {
+            margin: 0 0 20px 0;
+            color: #222;
+        }
+
+        button.logout-btn {
+            background-color: #ef4444;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 25px;
+            transition: background-color 0.3s ease;
+            width: 100%;
+            max-width: 250px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+            button.logout-btn:hover,
+            button.logout-btn:focus {
+                background-color: #dc2626;
+                outline: none;
+                box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.5);
+            }
+
+        form.search-form {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 25px;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+            form.search-form input[type="text"] {
+                padding: 10px;
+                flex-grow: 1;
+                min-width: 200px;
+                max-width: 350px;
+                border: 2px solid #3b82f6;
+                border-radius: 12px 0 0 12px;
+                font-size: 16px;
+                outline-offset: 2px;
+                transition: border-color 0.3s ease;
+            }
+
+                form.search-form input[type="text"]:focus {
+                    border-color: #60a5fa;
+                    outline: none;
+                    box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.5);
+                }
+
+            form.search-form button {
+                padding: 10px 20px;
+                border: 2px solid #3b82f6;
+                border-left: none;
+                background-color: #3b82f6;
+                color: white;
+                border-radius: 0 12px 12px 0;
+                cursor: pointer;
+                font-weight: 600;
+                transition: background-color 0.3s ease;
+            }
+
+                form.search-form button:hover,
+                form.search-form button:focus {
+                    background-color: #60a5fa;
+                    border-color: #60a5fa;
+                    outline: none;
+                    box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.5);
+                }
+
+        a#enlace_agregar {
+            color: #ef4444;
+            font-size: 42px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+            margin-bottom: 20px;
+            user-select: none;
+            cursor: pointer;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+            a#enlace_agregar:hover,
+            a#enlace_agregar:focus {
+                color: #f87171;
+                outline: none;
+                text-decoration: underline;
+            }
+
+        .envoltorio_tarea {
+            background-color: #f9fafb;
+            border: 1px solid #d1d5db;
+            border-radius: 12px;
+            border-left: 5px solid #3b82f6;
+            padding: 20px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s ease;
+        }
+
+            .envoltorio_tarea[data-completada="true"] {
+                background-color: #f3f4f6;
+                border-left-color: #9ca3af;
+            }
+
+        .titulo_tarea {
+            display: flex;
+            align-items: center;
+            flex-grow: 1;
+        }
+
+            .titulo_tarea a {
+                font-size: 1.1em;
+                font-weight: 600;
+                color: #333;
+                margin-left: 12px;
+                text-decoration: none;
+                transition: color 0.3s ease;
+            }
+
+        .envoltorio_tarea[data-completada="true"] .titulo_tarea a {
+            text-decoration: line-through;
+            color: #9ca3af;
+        }
+
+        .titulo_tarea a:hover,
+        .titulo_tarea a:focus {
+            color: #2563eb;
+            outline: none;
+            text-decoration: underline;
+        }
+
+        .icono_tarea_completa,
+        .icono_tarea_incompleta {
+            height: 22px;
+            width: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+            user-select: none;
+        }
+
+        .icono_tarea_completa {
+            background-color: #22c55e;
+        }
+
+        .icono_tarea_incompleta {
+            background-color: #ef4444;
+        }
+
+        .accion_completar,
+        .accion_desmarcar,
+        .enlace_eliminar {
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 8px;
+            padding: 8px 14px;
+            user-select: none;
+            margin-left: 10px;
+            text-decoration: none;
+            display: inline-block;
+            transition: background-color 0.3s ease;
+        }
+
+        .accion_completar {
+            background-color: #22c55e;
+        }
+
+            .accion_completar:hover,
+            .accion_completar:focus {
+                background-color: #16a34a;
+                outline: none;
+            }
+
+        .accion_desmarcar {
+            background-color: #f59e0b;
+        }
+
+            .accion_desmarcar:hover,
+            .accion_desmarcar:focus {
+                background-color: #d97706;
+                outline: none;
+            }
+
+        .enlace_eliminar {
+            background-color: #ef4444;
+        }
+
+            .enlace_eliminar:hover,
+            .enlace_eliminar:focus {
+                background-color: #dc2626;
+                outline: none;
+            }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            body {
+                padding: 10px 10px 20px;
+            }
+
+            .container {
+                padding: 20px 15px;
+                border-radius: 0;
+                box-shadow: none;
+            }
+
+            .barra_superior {
+                font-size: 22px;
+                padding: 12px 16px;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            h3 {
+                font-size: 16px;
+            }
+
+            button.logout-btn {
+                max-width: 100%;
+                width: 100%;
+            }
+
+            form.search-form {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+                form.search-form input[type="text"],
+                form.search-form button {
+                    width: 100%;
+                    border-radius: 12px;
+                    margin: 0;
+                    font-size: 16px;
+                }
+
+            .envoltorio_tarea {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 15px 12px;
+            }
+
+            .titulo_tarea {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            .accion_completar,
+            .accion_desmarcar,
+            .enlace_eliminar {
+                margin-left: 0;
+                margin-top: 6px;
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="barra_superior">
+            Lista de Pendientes
+        </div>
+
+        {% block content %}
+        <!-- Aquí va el contenido dinámico -->
+        {% endblock %}
+    </div>
+</body>
+</html>

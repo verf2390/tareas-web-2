@@ -1,0 +1,70 @@
+﻿{% extends 'base/principal.html' %}
+
+{% block content %}
+<div class="barra_superior">
+    <a href="{% url 'tareas' %}" title="Volver a la lista de tareas" style="color: white; font-size: 24px;">⮐</a>
+    <span>Formulario de tareas</span>
+</div>
+
+<div class="cuerpo_tarjeta">
+    <form method="POST" action="">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form.as_p }}
+        </div>
+        <input class="boton" type="submit" value="Guardar tarea">
+    </form>
+</div>
+
+<style>
+    h1 {
+        margin-bottom: 20px;
+        font-size: 24px;
+        color: #1c4dd0;
+        text-align: center;
+    }
+
+    .form-group {
+        padding: 10px;
+    }
+
+    input[type="text"],
+    textarea,
+    select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 16px;
+        margin-bottom: 15px;
+        box-sizing: border-box;
+    }
+
+    label {
+        font-weight: 600;
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    input[type="checkbox"] {
+        transform: scale(1.2);
+        margin-right: 8px;
+    }
+
+    .boton {
+        background-color: #1c4dd0;
+        color: white;
+        border: none;
+        padding: 10px 25px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+    }
+
+        .boton:hover {
+            background-color: #153ab5;
+        }
+</style>
+{% endblock %}
