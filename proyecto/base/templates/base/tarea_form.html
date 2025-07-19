@@ -9,9 +9,23 @@
 <div class="cuerpo_tarjeta">
     <form method="POST" action="">
         {% csrf_token %}
+
         <div class="form-group">
-            {{ form.as_p }}
+            <label for="id_titulo">Título:</label>
+            {{ form.titulo }}
+
+            <label for="id_descripcion">Descripción:</label>
+            {{ form.descripcion }}
+
+            <label for="id_fecha_tarea">Fecha y hora:</label>
+            <input type="datetime-local" name="fecha_tarea" id="id_fecha_tarea"
+                   value="{{ form.instance.fecha_tarea|date:'Y-m-d\\TH:i' }}" required>
+
+            <label for="id_completo" style="margin-top: 10px;">
+                {{ form.completo }} Completa
+            </label>
         </div>
+
         <input class="boton" type="submit" value="Guardar tarea">
     </form>
 </div>
@@ -29,6 +43,7 @@
     }
 
     input[type="text"],
+    input[type="datetime-local"],
     textarea,
     select {
         width: 100%;
